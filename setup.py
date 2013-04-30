@@ -5,11 +5,16 @@ import os
 
 setup(
     name='python-esteid',
-    version='0.1.5',
+    version='0.1.6',
     description='Utilities for Estonian eID and mID infrastructure',
     long_description= open(os.path.join(os.path.dirname(__file__), 'README')).read(),
     classifiers=['Topic :: Utilities',
-                 'Topic :: Security :: Cryptography'],
+                 'Topic :: Security :: Cryptography',
+                 'License :: OSI Approved :: MIT License',
+                 'Programming Language :: Python :: 2.5',
+                 'Programming Language :: Python :: 2.6',
+                 'Programming Language :: Python :: 2.7',
+                 'Programming Language :: Python :: Implementation :: CPython'],
     author='Martin Paljak',
     author_email='martin@martinpaljak.net',
     url='https://github.com/martinpaljak/python-esteid',
