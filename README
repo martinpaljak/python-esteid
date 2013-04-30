@@ -7,3 +7,11 @@ The esteid utility helps to:
 
 Access to the Mobile-ID DigiDocService is currently excluded from
 the source.
+
+This depends on M2Crypto either being available or being able to
+build it, ditto for python-ldap.
+
+On Debians:
+sudo apt-get install build-essential libssl-dev swig \
+libsasl2-dev libldap-dev python-dev
+

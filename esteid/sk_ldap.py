@@ -10,7 +10,7 @@ SIGN = "Digital Signature"
 
 _ = lambda x: x # please copypaste from lib/libldap.py
 
-LDAP_SERVER = "ldap.sk.ee"
+LDAP_SERVER = "ldap://ldap.sk.ee"
 
 class LdapError(Exception):
     pass
@@ -21,7 +21,7 @@ def get_pem_from_ldap(idcode, cert_type, chip_type):
     """
     assert idcode.isdigit() and len(idcode) == 11
 
-    server = ldap.open(LDAP_SERVER)
+    server = ldap.initialize(LDAP_SERVER)
     q = server.search('ou=%s,o=%s,c=EE' % (cert_type, chip_type),
             ldap.SCOPE_SUBTREE,
             'serialNumber=%s' % idcode,
