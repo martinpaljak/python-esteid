@@ -1,0 +1,6 @@
+M2Crypto updates:
+ - OCSP
+ - single certificate verification
+
+DigiDocService updates:
+ - bring the code back in with token authentication

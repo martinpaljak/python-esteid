@@ -1,0 +1,951 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="DigiDocService"
+ targetNamespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl"
+ xmlns:tns="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl"
+ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:d="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl"
+ xmlns:mss="http://www.sk.ee:8098/MSSP_GW/MSSP_GW.wsdl"
+ xmlns:SOAP="http://schemas.xmlsoap.org/wsdl/soap/"
+ xmlns:MIME="http://schemas.xmlsoap.org/wsdl/mime/"
+ xmlns:DIME="http://schemas.xmlsoap.org/ws/2002/04/dime/wsdl/"
+ xmlns:WSDL="http://schemas.xmlsoap.org/wsdl/"
+ xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+<types>
+
+ <schema targetNamespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl"
+  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:d="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl"
+  xmlns:mss="http://www.sk.ee:8098/MSSP_GW/MSSP_GW.wsdl"
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="unqualified"
+  attributeFormDefault="qualified">
+  <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+  <complexType name="DataFileAttribute">
+   <sequence>
+     <element name="Name" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Value" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="DataFileInfo">
+   <sequence>
+     <element name="Id" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Filename" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="MimeType" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="ContentType" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Size" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="DigestType" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="DigestValue" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Attributes" type="d:DataFileAttribute" minOccurs="0" maxOccurs="unbounded"/>
+   </sequence>
+  </complexType>
+  <complexType name="SignerRole">
+   <sequence>
+     <element name="Certified" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="Role" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="SignatureProductionPlace">
+   <sequence>
+     <element name="City" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="StateOrProvince" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="PostalCode" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="CountryName" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="CertificatePolicy">
+   <sequence>
+     <element name="OID" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="URL" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Description" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="CertificateInfo">
+   <sequence>
+     <element name="Issuer" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Subject" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="ValidFrom" type="xsd:dateTime" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="ValidTo" type="xsd:dateTime" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="IssuerSerial" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Policies" type="d:CertificatePolicy" minOccurs="0" maxOccurs="unbounded"/>
+   </sequence>
+  </complexType>
+  <complexType name="SignerInfo">
+   <sequence>
+     <element name="CommonName" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="IDCode" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Certificate" type="d:CertificateInfo" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="ConfirmationInfo">
+   <sequence>
+     <element name="ResponderID" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="ProducedAt" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="ResponderCertificate" type="d:CertificateInfo" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="TstInfo">
+   <sequence>
+     <element name="Id" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Type" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="SerialNumber" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="CreationTime" type="xsd:dateTime" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Policy" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="ErrorBound" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Ordered" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+     <element name="TSA" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Certificate" type="d:CertificateInfo" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="RevokedInfo">
+   <sequence>
+     <element name="Sequence" type="xsd:positiveInteger" minOccurs="1" maxOccurs="1"/>
+     <element name="SerialNumber" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="RevocationDate" type="xsd:dateTime" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="CRLInfo">
+   <sequence>
+     <element name="Issuer" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="LastUpdate" type="xsd:dateTime" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="NextUpdate" type="xsd:dateTime" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Revocations" type="d:RevokedInfo" minOccurs="0" maxOccurs="unbounded"/>
+   </sequence>
+  </complexType>
+  <complexType name="Error">
+   <sequence>
+     <element name="Code" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="Category" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Description" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="SignatureInfo">
+   <sequence>
+     <element name="Id" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Status" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Error" type="d:Error" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="SigningTime" type="xsd:dateTime" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="SignerRole" type="d:SignerRole" minOccurs="0" maxOccurs="unbounded"/>
+     <element name="SignatureProductionPlace" type="d:SignatureProductionPlace" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Signer" type="d:SignerInfo" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Confirmation" type="d:ConfirmationInfo" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Timestamps" type="d:TstInfo" minOccurs="0" maxOccurs="unbounded"/>
+     <element name="CRLInfo" type="d:CRLInfo" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="SignedDocInfo">
+   <sequence>
+     <element name="Format" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Version" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="DataFileInfo" type="d:DataFileInfo" minOccurs="0" maxOccurs="unbounded"/>
+     <element name="SignatureInfo" type="d:SignatureInfo" minOccurs="0" maxOccurs="unbounded"/>
+   </sequence>
+  </complexType>
+  <complexType name="DataFileData">
+   <sequence>
+     <element name="Id" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Filename" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="MimeType" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="ContentType" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="DigestType" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="DigestValue" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Size" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="Attributes" type="d:DataFileAttribute" minOccurs="0" maxOccurs="unbounded"/>
+     <element name="DfData" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="SignatureModule">
+   <sequence>
+     <element name="Name" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Type" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Location" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="ContentType" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="Content" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="SignatureModulesArray">
+   <sequence>
+     <element name="Modules" type="d:SignatureModule" minOccurs="0" maxOccurs="unbounded"/>
+   </sequence>
+  </complexType>
+  <complexType name="DataFileDigest">
+   <sequence>
+     <element name="Id" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="DigestType" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="DigestValue" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="DataFileDigestList">
+   <sequence>
+     <element name="DataFileDigest" type="d:DataFileDigest" minOccurs="0" maxOccurs="unbounded"/>
+   </sequence>
+  </complexType>
+ </schema>
+
+ <schema targetNamespace="http://www.sk.ee:8098/MSSP_GW/MSSP_GW.wsdl"
+  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:d="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl"
+  xmlns:mss="http://www.sk.ee:8098/MSSP_GW/MSSP_GW.wsdl"
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  attributeFormDefault="qualified">
+  <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+ </schema>
+
+</types>
+
+<message name="StartSession">
+ <part name="SigningProfile" type="xsd:string"/>
+ <part name="SigDocXML" type="xsd:string"/>
+ <part name="bHoldSession" type="xsd:boolean"/>
+ <part name="datafile" type="d:DataFileData"/>
+</message>
+
+<message name="StartSessionResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="SignedDocInfo" type="d:SignedDocInfo"/>
+</message>
+
+<message name="CloseSession">
+ <part name="Sesscode" type="xsd:int"/>
+</message>
+
+<message name="CloseSessionResponse">
+ <part name="Status" type="xsd:string"/>
+</message>
+
+<message name="CreateSignedDoc">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="Format" type="xsd:string"/>
+ <part name="Version" type="xsd:string"/>
+</message>
+
+<message name="CreateSignedDocResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="SignedDocInfo" type="d:SignedDocInfo"/>
+</message>
+
+<message name="AddDataFile">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="FileName" type="xsd:string"/>
+ <part name="MimeType" type="xsd:string"/>
+ <part name="ContentType" type="xsd:string"/>
+ <part name="Size" type="xsd:int"/>
+ <part name="DigestType" type="xsd:string"/>
+ <part name="DigestValue" type="xsd:string"/>
+ <part name="Content" type="xsd:string"/>
+</message>
+
+<message name="AddDataFileResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="SignedDocInfo" type="d:SignedDocInfo"/>
+</message>
+
+<message name="RemoveDataFile">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="DataFileId" type="xsd:string"/>
+</message>
+
+<message name="RemoveDataFileResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="SignedDocInfo" type="d:SignedDocInfo"/>
+</message>
+
+<message name="GetSignedDoc">
+ <part name="Sesscode" type="xsd:int"/>
+</message>
+
+<message name="GetSignedDocResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="SignedDocData" type="xsd:string"/>
+</message>
+
+<message name="GetSignedDocInfo">
+ <part name="Sesscode" type="xsd:int"/>
+</message>
+
+<message name="GetSignedDocInfoResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="SignedDocInfo" type="d:SignedDocInfo"/>
+</message>
+
+<message name="GetDataFile">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="DataFileId" type="xsd:string"/>
+</message>
+
+<message name="GetDataFileResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="DataFileData" type="d:DataFileData"/>
+</message>
+
+<message name="GetSignersCertificate">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="SignatureId" type="xsd:string"/>
+</message>
+
+<message name="GetSignersCertificateResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="CertificateData" type="xsd:string"/>
+</message>
+
+<message name="GetNotarysCertificate">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="SignatureId" type="xsd:string"/>
+</message>
+
+<message name="GetNotarysCertificateResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="CertificateData" type="xsd:string"/>
+</message>
+
+<message name="GetNotary">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="SignatureId" type="xsd:string"/>
+</message>
+
+<message name="GetNotaryResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="OcspData" type="xsd:string"/>
+</message>
+
+<message name="GetTSACertificate">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="TimestampId" type="xsd:string"/>
+</message>
+
+<message name="GetTSACertificateResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="CertificateData" type="xsd:string"/>
+</message>
+
+<message name="GetTimestamp">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="TimestampId" type="xsd:string"/>
+</message>
+
+<message name="GetTimestampResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="TimestampData" type="xsd:string"/>
+</message>
+
+<message name="GetCRL">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="SignatureId" type="xsd:string"/>
+</message>
+
+<message name="GetCRLResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="CRLData" type="xsd:string"/>
+</message>
+
+<message name="GetSignatureModules">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="Platform" type="xsd:string"/>
+ <part name="Phase" type="xsd:string"/>
+ <part name="Type" type="xsd:string"/>
+</message>
+
+<message name="GetSignatureModulesResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="Modules" type="d:SignatureModulesArray"/>
+</message>
+
+<message name="PrepareSignature">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="SignersCertificate" type="xsd:string"/>
+ <part name="SignersTokenId" type="xsd:string"/>
+ <part name="Role" type="xsd:string"/>
+ <part name="City" type="xsd:string"/>
+ <part name="State" type="xsd:string"/>
+ <part name="PostalCode" type="xsd:string"/>
+ <part name="Country" type="xsd:string"/>
+ <part name="SigningProfile" type="xsd:string"/>
+</message>
+
+<message name="PrepareSignatureResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="SignatureId" type="xsd:string"/>
+ <part name="SignedInfoDigest" type="xsd:string"/>
+</message>
+
+<message name="FinalizeSignature">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="SignatureId" type="xsd:string"/>
+ <part name="SignatureValue" type="xsd:string"/>
+</message>
+
+<message name="FinalizeSignatureResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="SignedDocInfo" type="d:SignedDocInfo"/>
+</message>
+
+<message name="RemoveSignature">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="SignatureId" type="xsd:string"/>
+</message>
+
+<message name="RemoveSignatureResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="SignedDocInfo" type="d:SignedDocInfo"/>
+</message>
+
+<message name="GetVersion">
+</message>
+
+<message name="GetVersionResponse">
+ <part name="Name" type="xsd:string"/>
+ <part name="Version" type="xsd:string"/>
+ <part name="LibraryVersion" type="xsd:string"/>
+</message>
+
+<message name="MobileSign">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="SignerIDCode" type="xsd:string"/>
+ <part name="SignersCountry" type="xsd:string"/>
+ <part name="SignerPhoneNo" type="xsd:string"/>
+ <part name="ServiceName" type="xsd:string"/>
+ <part name="AdditionalDataToBeDisplayed" type="xsd:string"/>
+ <part name="Language" type="xsd:string"/>
+ <part name="Role" type="xsd:string"/>
+ <part name="City" type="xsd:string"/>
+ <part name="StateOrProvince" type="xsd:string"/>
+ <part name="PostalCode" type="xsd:string"/>
+ <part name="CountryName" type="xsd:string"/>
+ <part name="SigningProfile" type="xsd:string"/>
+ <part name="MessagingMode" type="xsd:string"/>
+ <part name="AsyncConfiguration" type="xsd:int"/>
+ <part name="ReturnDocInfo" type="xsd:boolean"/>
+ <part name="ReturnDocData" type="xsd:boolean"/>
+</message>
+
+<message name="MobileSignResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="StatusCode" type="xsd:string"/>
+ <part name="ChallengeID" type="xsd:string"/>
+</message>
+
+<message name="GetStatusInfo">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="ReturnDocInfo" type="xsd:boolean"/>
+ <part name="WaitSignature" type="xsd:boolean"/>
+</message>
+
+<message name="GetStatusInfoResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="StatusCode" type="xsd:string"/>
+ <part name="SignedDocInfo" type="d:SignedDocInfo"/>
+</message>
+
+<message name="MobileAuthenticate">
+ <part name="IDCode" type="xsd:string"/>
+ <part name="CountryCode" type="xsd:string"/>
+ <part name="PhoneNo" type="xsd:string"/>
+ <part name="Language" type="xsd:string"/>
+ <part name="ServiceName" type="xsd:string"/>
+ <part name="MessageToDisplay" type="xsd:string"/>
+ <part name="SPChallenge" type="xsd:string"/>
+ <part name="MessagingMode" type="xsd:string"/>
+ <part name="AsyncConfiguration" type="xsd:int"/>
+ <part name="ReturnCertData" type="xsd:boolean"/>
+ <part name="ReturnRevocationData" type="xsd:boolean"/>
+</message>
+
+<message name="MobileAuthenticateResponse">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="Status" type="xsd:string"/>
+ <part name="UserIDCode" type="xsd:string"/>
+ <part name="UserGivenname" type="xsd:string"/>
+ <part name="UserSurname" type="xsd:string"/>
+ <part name="UserCountry" type="xsd:string"/>
+ <part name="UserCN" type="xsd:string"/>
+ <part name="CertificateData" type="xsd:string"/>
+ <part name="ChallengeID" type="xsd:string"/>
+ <part name="Challenge" type="xsd:string"/>
+ <part name="RevocationData" type="xsd:string"/>
+</message>
+
+<message name="GetMobileAuthenticateStatus">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="WaitSignature" type="xsd:boolean"/>
+</message>
+
+<message name="GetMobileAuthenticateStatusResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="Signature" type="xsd:string"/>
+</message>
+
+<message name="MobileCreateSignature">
+ <part name="IDCode" type="xsd:string"/>
+ <part name="SignersCountry" type="xsd:string"/>
+ <part name="PhoneNo" type="xsd:string"/>
+ <part name="Language" type="xsd:string"/>
+ <part name="ServiceName" type="xsd:string"/>
+ <part name="MessageToDisplay" type="xsd:string"/>
+ <part name="Role" type="xsd:string"/>
+ <part name="City" type="xsd:string"/>
+ <part name="StateOrProvince" type="xsd:string"/>
+ <part name="PostalCode" type="xsd:string"/>
+ <part name="CountryName" type="xsd:string"/>
+ <part name="SigningProfile" type="xsd:string"/>
+ <part name="DataFiles" type="d:DataFileDigestList"/>
+ <part name="Format" type="xsd:string"/>
+ <part name="Version" type="xsd:string"/>
+ <part name="SignatureID" type="xsd:string"/>
+ <part name="MessagingMode" type="xsd:string"/>
+ <part name="AsyncConfiguration" type="xsd:int"/>
+</message>
+
+<message name="MobileCreateSignatureResponse">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="ChallengeID" type="xsd:string"/>
+ <part name="Status" type="xsd:string"/>
+</message>
+
+<message name="GetMobileCreateSignatureStatus">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="WaitSignature" type="xsd:boolean"/>
+</message>
+
+<message name="GetMobileCreateSignatureStatusResponse">
+ <part name="Sesscode" type="xsd:int"/>
+ <part name="Status" type="xsd:string"/>
+ <part name="Signature" type="xsd:string"/>
+</message>
+
+<message name="GetMobileCertificate">
+ <part name="IDCode" type="xsd:string"/>
+ <part name="Country" type="xsd:string"/>
+ <part name="PhoneNo" type="xsd:string"/>
+ <part name="ReturnCertData" type="xsd:string"/>
+</message>
+
+<message name="GetMobileCertificateResponse">
+ <part name="AuthCertStatus" type="xsd:string"/>
+ <part name="SignCertStatus" type="xsd:string"/>
+ <part name="AuthCertData" type="xsd:string"/>
+ <part name="SignCertData" type="xsd:string"/>
+</message>
+
+<message name="CheckCertificate">
+ <part name="Certificate" type="xsd:string"/>
+ <part name="ReturnRevocationData" type="xsd:boolean"/>
+</message>
+
+<message name="CheckCertificateResponse">
+ <part name="Status" type="xsd:string"/>
+ <part name="UserIDCode" type="xsd:string"/>
+ <part name="UserGivenname" type="xsd:string"/>
+ <part name="UserSurname" type="xsd:string"/>
+ <part name="UserCountry" type="xsd:string"/>
+ <part name="UserOrganisation" type="xsd:string"/>
+ <part name="UserCN" type="xsd:string"/>
+ <part name="IssuerCN" type="xsd:string"/>
+ <part name="KeyUsage" type="xsd:string"/>
+ <part name="EnhancedKeyUsage" type="xsd:string"/>
+ <part name="RevocationData" type="xsd:string"/>
+</message>
+
+<portType name="DigiDocServicePortType">
+ <operation name="StartSession">
+  <documentation>Service definition of function d__StartSession</documentation>
+  <input message="tns:StartSession"/>
+  <output message="tns:StartSessionResponse"/>
+ </operation>
+ <operation name="CloseSession">
+  <documentation>Service definition of function d__CloseSession</documentation>
+  <input message="tns:CloseSession"/>
+  <output message="tns:CloseSessionResponse"/>
+ </operation>
+ <operation name="CreateSignedDoc">
+  <documentation>Service definition of function d__CreateSignedDoc</documentation>
+  <input message="tns:CreateSignedDoc"/>
+  <output message="tns:CreateSignedDocResponse"/>
+ </operation>
+ <operation name="AddDataFile">
+  <documentation>Service definition of function d__AddDataFile</documentation>
+  <input message="tns:AddDataFile"/>
+  <output message="tns:AddDataFileResponse"/>
+ </operation>
+ <operation name="RemoveDataFile">
+  <documentation>Service definition of function d__RemoveDataFile</documentation>
+  <input message="tns:RemoveDataFile"/>
+  <output message="tns:RemoveDataFileResponse"/>
+ </operation>
+ <operation name="GetSignedDoc">
+  <documentation>Service definition of function d__GetSignedDoc</documentation>
+  <input message="tns:GetSignedDoc"/>
+  <output message="tns:GetSignedDocResponse"/>
+ </operation>
+ <operation name="GetSignedDocInfo">
+  <documentation>Service definition of function d__GetSignedDocInfo</documentation>
+  <input message="tns:GetSignedDocInfo"/>
+  <output message="tns:GetSignedDocInfoResponse"/>
+ </operation>
+ <operation name="GetDataFile">
+  <documentation>Service definition of function d__GetDataFile</documentation>
+  <input message="tns:GetDataFile"/>
+  <output message="tns:GetDataFileResponse"/>
+ </operation>
+ <operation name="GetSignersCertificate">
+  <documentation>Service definition of function d__GetSignersCertificate</documentation>
+  <input message="tns:GetSignersCertificate"/>
+  <output message="tns:GetSignersCertificateResponse"/>
+ </operation>
+ <operation name="GetNotarysCertificate">
+  <documentation>Service definition of function d__GetNotarysCertificate</documentation>
+  <input message="tns:GetNotarysCertificate"/>
+  <output message="tns:GetNotarysCertificateResponse"/>
+ </operation>
+ <operation name="GetNotary">
+  <documentation>Service definition of function d__GetNotary</documentation>
+  <input message="tns:GetNotary"/>
+  <output message="tns:GetNotaryResponse"/>
+ </operation>
+ <operation name="GetTSACertificate">
+  <documentation>Service definition of function d__GetTSACertificate</documentation>
+  <input message="tns:GetTSACertificate"/>
+  <output message="tns:GetTSACertificateResponse"/>
+ </operation>
+ <operation name="GetTimestamp">
+  <documentation>Service definition of function d__GetTimestamp</documentation>
+  <input message="tns:GetTimestamp"/>
+  <output message="tns:GetTimestampResponse"/>
+ </operation>
+ <operation name="GetCRL">
+  <documentation>Service definition of function d__GetCRL</documentation>
+  <input message="tns:GetCRL"/>
+  <output message="tns:GetCRLResponse"/>
+ </operation>
+ <operation name="GetSignatureModules">
+  <documentation>Service definition of function d__GetSignatureModules</documentation>
+  <input message="tns:GetSignatureModules"/>
+  <output message="tns:GetSignatureModulesResponse"/>
+ </operation>
+ <operation name="PrepareSignature">
+  <documentation>Service definition of function d__PrepareSignature</documentation>
+  <input message="tns:PrepareSignature"/>
+  <output message="tns:PrepareSignatureResponse"/>
+ </operation>
+ <operation name="FinalizeSignature">
+  <documentation>Service definition of function d__FinalizeSignature</documentation>
+  <input message="tns:FinalizeSignature"/>
+  <output message="tns:FinalizeSignatureResponse"/>
+ </operation>
+ <operation name="RemoveSignature">
+  <documentation>Service definition of function d__RemoveSignature</documentation>
+  <input message="tns:RemoveSignature"/>
+  <output message="tns:RemoveSignatureResponse"/>
+ </operation>
+ <operation name="GetVersion">
+  <documentation>Service definition of function d__GetVersion</documentation>
+  <input message="tns:GetVersion"/>
+  <output message="tns:GetVersionResponse"/>
+ </operation>
+ <operation name="MobileSign">
+  <documentation>Service definition of function d__MobileSign</documentation>
+  <input message="tns:MobileSign"/>
+  <output message="tns:MobileSignResponse"/>
+ </operation>
+ <operation name="GetStatusInfo">
+  <documentation>Service definition of function d__GetStatusInfo</documentation>
+  <input message="tns:GetStatusInfo"/>
+  <output message="tns:GetStatusInfoResponse"/>
+ </operation>
+ <operation name="MobileAuthenticate">
+  <documentation>Service definition of function d__MobileAuthenticate</documentation>
+  <input message="tns:MobileAuthenticate"/>
+  <output message="tns:MobileAuthenticateResponse"/>
+ </operation>
+ <operation name="GetMobileAuthenticateStatus">
+  <documentation>Service definition of function d__GetMobileAuthenticateStatus</documentation>
+  <input message="tns:GetMobileAuthenticateStatus"/>
+  <output message="tns:GetMobileAuthenticateStatusResponse"/>
+ </operation>
+ <operation name="MobileCreateSignature">
+  <documentation>Service definition of function d__MobileCreateSignature</documentation>
+  <input message="tns:MobileCreateSignature"/>
+  <output message="tns:MobileCreateSignatureResponse"/>
+ </operation>
+ <operation name="GetMobileCreateSignatureStatus">
+  <documentation>Service definition of function d__GetMobileCreateSignatureStatus</documentation>
+  <input message="tns:GetMobileCreateSignatureStatus"/>
+  <output message="tns:GetMobileCreateSignatureStatusResponse"/>
+ </operation>
+ <operation name="GetMobileCertificate">
+  <documentation>Service definition of function d__GetMobileCertificate</documentation>
+  <input message="tns:GetMobileCertificate"/>
+  <output message="tns:GetMobileCertificateResponse"/>
+ </operation>
+ <operation name="CheckCertificate">
+  <documentation>Service definition of function d__CheckCertificate</documentation>
+  <input message="tns:CheckCertificate"/>
+  <output message="tns:CheckCertificateResponse"/>
+ </operation>
+</portType>
+
+<binding name="DigiDocService" type="tns:DigiDocServicePortType">
+ <SOAP:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+ <operation name="StartSession">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="CloseSession">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="CreateSignedDoc">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="AddDataFile">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="RemoveDataFile">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="GetSignedDoc">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="GetSignedDocInfo">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="GetDataFile">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="GetSignersCertificate">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="GetNotarysCertificate">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="GetNotary">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="GetTSACertificate">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="GetTimestamp">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="GetCRL">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="GetSignatureModules">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="PrepareSignature">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="FinalizeSignature">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="RemoveSignature">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="GetVersion">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="MobileSign">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="GetStatusInfo">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="MobileAuthenticate">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="GetMobileAuthenticateStatus">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="MobileCreateSignature">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="GetMobileCreateSignatureStatus">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="GetMobileCertificate">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="CheckCertificate">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+</binding>
+
+<service name="DigiDocService">
+ <documentation>Digital signature service</documentation>
+ <port name="DigiDocService" binding="tns:DigiDocService">
+  <SOAP:address location="https://digidocservice.sk.ee/DigiDocService"/>
+ </port>
+</service>
+
+</definitions>

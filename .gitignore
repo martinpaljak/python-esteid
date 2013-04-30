@@ -1,0 +1,8 @@
+/*.egg-info
+*~
+*.pyc
+/esteid/certs/ocsp.key
+/esteid/certs/ocsp.pem
+/dist
+/build
+
