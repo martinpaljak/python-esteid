@@ -5,6 +5,16 @@ from esteid import sk_ocsp
 from esteid import ssh
 import sys
 
+
+def is_resident(chip_type):
+	return chip_type in (sk_ldap.RESIDENT_DIGI, sk_ldap.RESIDENT_MID)
+
+def residentify(chip_type):
+	if chip_type == sk_ldap.IDCARD or chip_type == sk_ldap.DIGI:
+		return sk_ldap.RESIDENT_DIGI
+	elif chip_type == sk_ldap.MID:
+		return sk_ldap.RESIDENT_MID
+
 class LDAP(Command):
    """Interface to ldap.sk.ee"""
    
@@ -12,8 +22,10 @@ class LDAP(Command):
      parser = super(LDAP, self).get_parser(prog_name)
      parser.add_argument('idcode', nargs='+')
      parser.add_argument('--type', dest='cert_type', choices=["auth", "sign"], default="auth")
+     parser.add_argument('--idx', choices=["1", "2", "3", "4"])
      parser.add_argument('--digi-id', action='store_true')
      parser.add_argument('--mobiil-id', action='store_true')
+     parser.add_argument('--resident', action='store_true')
      return parser
                             
    
@@ -25,6 +37,9 @@ class LDAP(Command):
      else:
        chip_type = sk_ldap.IDCARD
      
+     if parsed_args.resident:
+       chip_type = residentify(chip_type)
+
      if parsed_args.cert_type == "auth":
        cert_type = sk_ldap.AUTH
      elif parsed_args.cert_type == "sign":
@@ -32,9 +47,25 @@ class LDAP(Command):
      
      for idcode in parsed_args.idcode:
        try:
-         print sk_ldap.get_pem_from_ldap(idcode, cert_type, chip_type)
+         pems = sk_ldap.get_pems_from_ldap(idcode, cert_type, chip_type)
+         if len(pems) > 1:
+           if not parsed_args.idx:
+             print "ERROR: %d certificates for %s, must specify which one to use with --idx" %(len(pems), idcode)
+           else:
+             print pems[int(parsed_args.idx)-1] # Do not force user to start from 0
+         else:
+           print pems[0]
        except sk_ldap.LdapError, e:
-         print "ERROR for %s" %(idcode)
+         residents = []
+         if not is_resident(chip_type):
+           try:
+             residents = sk_ldap.get_pems_from_ldap(idcode, cert_type, residentify(chip_type))
+           except:
+             pass
+           if len(residents) > 0:
+             print "HINT: %s is an e-resident. Try again with --resident" %(idcode)
+           else:
+             print "ERROR for %s: %s" %(idcode, e)
 
 
 
