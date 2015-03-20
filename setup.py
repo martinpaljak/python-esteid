@@ -25,7 +25,7 @@ setup(
     install_requires=['M2Crypto>=0.22',
                       'python-ldap>=2.4.10',
                       'cliff>=1.3.2'],
-    entry_points={'console_scripts': ['esteid = esteid.main:main'],
+    entry_points={'console_scripts': ['sk = esteid.main:main'],
                   'esteid.cli': ['ldap = esteid.cli:LDAP',
                                  'ssh = esteid.cli:SSH',
                                  'verify = esteid.cli:Verify',
