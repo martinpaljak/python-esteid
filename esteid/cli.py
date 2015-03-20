@@ -48,9 +48,13 @@ class LDAP(Command):
      for idcode in parsed_args.idcode:
        try:
          pems = sk_ldap.get_pems_from_ldap(idcode, cert_type, chip_type)
+         if parsed_args.idx and int(parsed_args.idx) > len(pems):
+           print "ERROR: Invalid index %d, only %d certificates returned" % (int(parsed_args.idx), len(pems))
+           sys.exit(1)
          if len(pems) > 1:
            if not parsed_args.idx:
              print "ERROR: %d certificates for %s, must specify which one to use with --idx" %(len(pems), idcode)
+             sys.exit(1)
            else:
              print pems[int(parsed_args.idx)-1] # Do not force user to start from 0
          else:
