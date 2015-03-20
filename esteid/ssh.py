@@ -30,17 +30,29 @@ def pem_cert_to_ssh_line(cert):
 def idcode_to_lines(idcode, nodigi=False):
   lines = []
   try:
-    cert = sk_ldap.get_pem_from_ldap(idcode, sk_ldap.AUTH, sk_ldap.IDCARD)
-    lines.append(pem_cert_to_ssh_line(cert))
+    certs = sk_ldap.get_pems_from_ldap(idcode, sk_ldap.AUTH, sk_ldap.IDCARD)
+    for cert in certs:
+      lines.append(pem_cert_to_ssh_line(cert))
   except:
      pass
   if not nodigi:
      # Digi-ID is optional card, thus don't log errors.
      try:
-        cert = sk_ldap.get_pem_from_ldap(idcode, sk_ldap.AUTH, sk_ldap.DIGI)
-        lines.append(pem_cert_to_ssh_line(cert))
+        certs = sk_ldap.get_pems_from_ldap(idcode, sk_ldap.AUTH, sk_ldap.DIGI)
+        for cert in certs:
+          lines.append(pem_cert_to_ssh_line(cert))
      except:
         pass
+
+     # Also try e-residents
+     # Digi-ID is optional card, thus don't log errors.
+     try:
+        certs = sk_ldap.get_pems_from_ldap(idcode, sk_ldap.AUTH, sk_ldap.RESIDENT_DIGI)
+        for cert in certs:
+          lines.append(pem_cert_to_ssh_line(cert))
+     except:
+        pass
+
   return lines
 
 
