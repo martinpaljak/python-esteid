@@ -5,7 +5,7 @@ import os
 
 setup(
     name='python-esteid',
-    version='0.1.6',
+    version='0.1.7',
     description='Utilities for Estonian eID and mID infrastructure',
     long_description= open(os.path.join(os.path.dirname(__file__), 'README')).read(),
     classifiers=['Topic :: Utilities',
