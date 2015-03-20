@@ -19,34 +19,37 @@ Some samples using the ID code of me (Martin Paljak 38207162722) or Edward Lucas
 
 - Query my authentication certificate from LDAP:
 
-    sk ldap 38207162722
+    `sk ldap 38207162722`
 
 - Parse the certificate as well:
 
-    sk ldap 38207162722 | openssl x509 -text -noout
+    `sk ldap 38207162722 | openssl x509 -text -noout`
     
 - Get my Digi-ID signing certificate:
 
-    sk ldap 38207162722 --type sign --digi-id
+    `sk ldap 38207162722 --type sign --digi-id`
     
 - If there are several certificates (with newer Mobile-ID), you can get them individually:
 
-    sk ldap 38207162722 --type sign --mobiil-id --idx 2
+    `sk ldap 38207162722 --type sign --mobiil-id --idx 2`
 
 - There's a new type of certificates, [e-residents](https://e-estonia.com/e-residents/about/):
 
+    ```
     $ sk ldap 36205030034
     HINT: 36205030034 is an e-resident. Try again with --resident
+    ``` 
 
 - So you can easily separate residents and e-residents:
 
-    sk ldap 36205030034 --resident --type sign
+    `sk ldap 36205030034 --resident --type sign`
 
 - If you use SSH and key based authentication, you can easily give access to certain persons:
 
-   sk ssh 3820716272 36205030034 >> ~/.ssh/authorized_keys
+   `sk ssh 3820716272 36205030034 >> ~/.ssh/authorized_keys`
 
 ## Have fun!
 
 Regards,
-  38207162722
+
+  `38207162722`
