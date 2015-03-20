@@ -4,6 +4,8 @@ import ldap, base64, textwrap
 MID = "ESTEID (MOBIIL-ID)"
 DIGI = "ESTEID (DIGI-ID)"
 IDCARD = "ESTEID"
+RESIDENT_DIGI = "ESTEID (DIGI-ID E-RESIDENT)"
+RESIDENT_MID = "ESTEID (MOBIIL-ID E-RESIDENT)"
 
 AUTH = "Authentication"
 SIGN = "Digital Signature"
@@ -15,9 +17,9 @@ LDAP_SERVER = "ldap://ldap.sk.ee"
 class LdapError(Exception):
     pass
 
-def get_pem_from_ldap(idcode, cert_type, chip_type):
+def get_pems_from_ldap(idcode, cert_type, chip_type):
     """
-    Fetches the certificate of the idcode owner from SK LDAP.
+    Fetches the certificate(s) of the idcode owner from SK LDAP.
     """
     assert idcode.isdigit() and len(idcode) == 11
 
@@ -36,9 +38,7 @@ def get_pem_from_ldap(idcode, cert_type, chip_type):
             or not result[1][0][1]['userCertificate;binary'] \
             or not isinstance(result[1][0][1]['userCertificate;binary'], list):
         raise LdapError(_("Unexpected result format."))
-    pem = _get_pem_from_der(result[1][0][1]['userCertificate;binary'][0])
-    return pem
-
+    return [_get_pem_from_der(x) for x in result[1][0][1]['userCertificate;binary']]
 
 def _get_pem_from_der(der):
     """
