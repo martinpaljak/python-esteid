@@ -6,16 +6,16 @@ import array
 import sys
 
 
-def get_atr():
-    readerstates = [(readername, SCARD_STATE_UNAWARE)]
+def get_atr(reader):
+    readerstates = [(reader, SCARD_STATE_UNAWARE)]
     hresult, newstates = SCardGetStatusChange(hcontext, 0, readerstates)
     if hresult != SCARD_S_SUCCESS:
         raise error, 'Unable to connect: ' + SCardGetErrorMessage(hresult)
     return binascii.hexlify(array.array('B', newstates[0][2])).upper()
 
-def conn(readername, reset, proto):
-    resetname = ["SCARD_LEAVE_CARD", "SCARD_RESET_CARD", "SCARD_UNPOWER_CARD"]	
-    hresult, hcard, dwActiveProtocol = SCardConnect(hcontext, readername, SCARD_SHARE_SHARED, proto)
+def conn(readername, reset):
+    anyproto = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1
+    hresult, hcard, dwActiveProtocol = SCardConnect(hcontext, readername, SCARD_SHARE_SHARED, anyproto)
     if hresult != SCARD_S_SUCCESS:
         raise error, 'Unable to connect: ' + SCardGetErrorMessage(hresult)
     hresult = SCardDisconnect(hcard, reset)
@@ -42,16 +42,16 @@ try:
         if len(foundcards) > 1:
             print >> sys.stderr, "Please insert just a single card that shall be tested"
             sys.exit(1)
-        readername = foundcards[0]
+        reader = foundcards[0]
 
         # Get the cold ATR
-        conn(readername, SCARD_UNPOWER_CARD, SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1)
-        atr.add(get_atr())
+        conn(reader, SCARD_UNPOWER_CARD)
+        atr.add(get_atr(reader))
         # Make two soft-resets
-        conn(readername, SCARD_RESET_CARD, SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1)
-        atr.add(get_atr())
-        conn(readername, SCARD_RESET_CARD, SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1)
-        atr.add(get_atr())
+        conn(reader, SCARD_RESET_CARD)
+        atr.add(get_atr(reader))
+        conn(reader, SCARD_RESET_CARD)
+        atr.add(get_atr(reader))
     finally:
         hresult = SCardReleaseContext(hcontext)
         if hresult != SCARD_S_SUCCESS:
